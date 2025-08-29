@@ -6,6 +6,7 @@ EXECUTABLE_PATH="$INSTALL_DIR/$EXECUTABLE_NAME"
 USE_SUDO="false"
 OS=""
 ARCH=""
+FORCE_INSTALL="${FORCE_INSTALL:-false}"
 
 RED='\033[0;31m'
 PURPLE='\033[0;35m'
@@ -106,8 +107,15 @@ cleanup() {
 
 checkExisting() {
     if command -v sshm >/dev/null 2>&1; then
-        CURRENT_VERSION=$(sshm version 2>/dev/null || echo "unknown")
+        CURRENT_VERSION=$(sshm --version 2>/dev/null | grep -o 'version.*' | cut -d' ' -f2 || echo "unknown")
         printf "${YELLOW}SSHM is already installed (version: $CURRENT_VERSION)${NC}\n"
+        
+        # Check if FORCE_INSTALL is set
+        if [ "$FORCE_INSTALL" = "true" ]; then
+            printf "${GREEN}Force install enabled, proceeding with installation...${NC}\n"
+            return
+        fi
+        
         printf "${YELLOW}Do you want to overwrite it? [y/N]: ${NC}"
         read -r response
         case "$response" in
