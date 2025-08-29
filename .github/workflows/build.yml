@@ -59,7 +59,8 @@ jobs:
         CGO_ENABLED: 0
       run: |
         mkdir -p dist
-        go build -ldflags="-s -w" -o dist/sshm-${{ matrix.suffix }} .
+        VERSION=${GITHUB_REF#refs/tags/}
+        go build -ldflags="-s -w -X sshm/cmd.version=${VERSION}" -o dist/sshm-${{ matrix.suffix }} .
 
     - name: Create tarball
       run: |

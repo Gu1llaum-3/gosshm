@@ -11,7 +11,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
-const version = "1.0.0"
+// version will be set at build time via -ldflags
+var version = "dev"
 
 var rootCmd = &cobra.Command{
 	Use:   "sshm",
