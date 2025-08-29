@@ -4,10 +4,24 @@ This directory contains installation scripts for SSHM.
 
 ## Unix/Linux/macOS Installation
 
-### Quick Install
+### Quick Install (Recommended)
 
 ```bash
 curl -sSL https://raw.githubusercontent.com/Gu1llaum-3/gosshm/main/install/unix.sh | bash
+```
+
+**Note:** When using the pipe method, the installer will automatically proceed with installation if SSHM is already installed.
+
+### Install Options
+
+**Force install without prompts:**
+```bash
+FORCE_INSTALL=true bash -c "$(curl -sSL https://raw.githubusercontent.com/Gu1llaum-3/gosshm/main/install/unix.sh)"
+```
+
+**Disable auto-install when using pipe:**
+```bash
+FORCE_INSTALL=false bash -c "$(curl -sSL https://raw.githubusercontent.com/Gu1llaum-3/gosshm/main/install/unix.sh)"
 ```
 
 ### Manual Install

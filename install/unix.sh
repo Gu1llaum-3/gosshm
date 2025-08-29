@@ -116,6 +116,13 @@ checkExisting() {
             return
         fi
         
+        # Check if running via pipe (stdin is not a terminal)
+        if [ ! -t 0 ]; then
+            printf "${YELLOW}Running via pipe - automatically proceeding with installation...${NC}\n"
+            printf "${YELLOW}Use 'FORCE_INSTALL=false bash -c \"\$(curl -sSL ...)\"' to disable auto-install${NC}\n"
+            return
+        fi
+        
         printf "${YELLOW}Do you want to overwrite it? [y/N]: ${NC}"
         read -r response
         case "$response" in
