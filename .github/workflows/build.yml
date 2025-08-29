@@ -37,12 +37,12 @@ jobs:
       uses: actions/checkout@v4
 
     - name: Set up Go
-      uses: actions/setup-go@v4
+      uses: actions/setup-go@v5
       with:
-        go-version: '1.21'
+        go-version: '1.23'
 
     - name: Cache Go modules
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: ~/go/pkg/mod
         key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
@@ -65,7 +65,7 @@ jobs:
         rm sshm-${{ matrix.suffix }}
 
     - name: Upload artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: sshm-${{ matrix.suffix }}
         path: dist/sshm-${{ matrix.suffix }}.tar.gz
@@ -78,9 +78,10 @@ jobs:
     
     steps:
     - name: Download all artifacts
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         path: ./artifacts
+        merge-multiple: true
 
     - name: Prepare release assets
       run: |
@@ -89,7 +90,7 @@ jobs:
         ls -la ./release/
 
     - name: Create Release
-      uses: softprops/action-gh-release@v1
+      uses: softprops/action-gh-release@v2
       with:
         files: ./release/*
         draft: false
