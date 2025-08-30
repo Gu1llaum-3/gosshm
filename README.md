@@ -25,6 +25,7 @@ SSHM is a beautiful command-line tool that transforms how you manage and connect
 - **Delete hosts** with confirmation prompts
 - **Backup configurations** automatically before changes
 - **Validate settings** to prevent configuration errors
+- **ProxyJump support** for secure connection tunneling through bastion hosts
 
 ### 🎮 **User Experience**
 - **Zero configuration** - Works out of the box with your existing SSH setup
@@ -75,6 +76,7 @@ The interactive forms will guide you through configuration:
 - **Username** - SSH user
 - **Port** - SSH port (default: 22)
 - **Identity File** - Private key path
+- **ProxyJump** - Jump server for connection tunneling
 - **Tags** - Comma-separated tags for organization
 
 ### CLI Usage
@@ -120,6 +122,14 @@ Host db-dev
     User admin
     Port 2222
     IdentityFile ~/.ssh/dev_key
+
+# Tags: production, backend
+Host backend-prod
+    HostName 10.0.1.50
+    User app
+    Port 22
+    ProxyJump bastion.company.com
+    IdentityFile ~/.ssh/production_key
 ```
 
 ### Supported SSH Options
@@ -128,6 +138,7 @@ Host db-dev
 - `User` - Username for SSH connection
 - `Port` - SSH port number
 - `IdentityFile` - Path to private key file
+- `ProxyJump` - Jump server for connection tunneling (e.g., `user@jumphost:port`)
 - `Tags` - Custom tags (SSHM extension)
 
 ## 🛠️ Development

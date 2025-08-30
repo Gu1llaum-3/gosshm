@@ -42,6 +42,7 @@ const (
 	userInput
 	portInput
 	identityInput
+	proxyJumpInput
 	tagsInput
 )
 
@@ -67,7 +68,7 @@ func RunAddForm(hostname string) error {
 		}
 	}
 
-	inputs := make([]textinput.Model, 6)
+	inputs := make([]textinput.Model, 7)
 
 	// Name input
 	inputs[nameInput] = textinput.New()
@@ -102,6 +103,12 @@ func RunAddForm(hostname string) error {
 	inputs[identityInput].Placeholder = defaultIdentity
 	inputs[identityInput].CharLimit = 200
 	inputs[identityInput].Width = 50
+
+	// ProxyJump input
+	inputs[proxyJumpInput] = textinput.New()
+	inputs[proxyJumpInput].Placeholder = "user@jump-host:port or existing-host-name"
+	inputs[proxyJumpInput].CharLimit = 200
+	inputs[proxyJumpInput].Width = 50
 
 	// Tags input
 	inputs[tagsInput] = textinput.New()
@@ -204,6 +211,7 @@ func (m *addFormModel) View() string {
 		"User",
 		"Port",
 		"Identity File",
+		"ProxyJump",
 		"Tags (comma-separated)",
 	}
 
@@ -239,6 +247,7 @@ func (m *addFormModel) submitForm() tea.Cmd {
 		user := strings.TrimSpace(m.inputs[userInput].Value())
 		port := strings.TrimSpace(m.inputs[portInput].Value())
 		identity := strings.TrimSpace(m.inputs[identityInput].Value())
+		proxyJump := strings.TrimSpace(m.inputs[proxyJumpInput].Value())
 
 		// Set defaults
 		if user == "" {
@@ -269,12 +278,13 @@ func (m *addFormModel) submitForm() tea.Cmd {
 
 		// Create host configuration
 		host := config.SSHHost{
-			Name:     name,
-			Hostname: hostname,
-			User:     user,
-			Port:     port,
-			Identity: identity,
-			Tags:     tags,
+			Name:      name,
+			Hostname:  hostname,
+			User:      user,
+			Port:      port,
+			Identity:  identity,
+			ProxyJump: proxyJump,
+			Tags:      tags,
 		}
 
 		// Add to config

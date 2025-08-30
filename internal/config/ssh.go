@@ -12,12 +12,13 @@ import (
 
 // SSHHost represents an SSH host configuration
 type SSHHost struct {
-	Name     string
-	Hostname string
-	User     string
-	Port     string
-	Identity string
-	Tags     []string
+	Name      string
+	Hostname  string
+	User      string
+	Port      string
+	Identity  string
+	ProxyJump string
+	Tags      []string
 }
 
 // configMutex protects SSH config file operations from race conditions
@@ -134,6 +135,10 @@ func ParseSSHConfigFile(configPath string) ([]SSHHost, error) {
 			if currentHost != nil {
 				currentHost.Identity = value
 			}
+		case "proxyjump":
+			if currentHost != nil {
+				currentHost.ProxyJump = value
+			}
 		}
 	}
 
@@ -221,6 +226,13 @@ func AddSSHHost(host SSHHost) error {
 
 	if host.Identity != "" {
 		_, err = file.WriteString(fmt.Sprintf("    IdentityFile %s\n", host.Identity))
+		if err != nil {
+			return err
+		}
+	}
+
+	if host.ProxyJump != "" {
+		_, err = file.WriteString(fmt.Sprintf("    ProxyJump %s\n", host.ProxyJump))
 		if err != nil {
 			return err
 		}

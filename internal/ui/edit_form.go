@@ -41,7 +41,7 @@ func RunEditForm(hostName string) error {
 		return err
 	}
 
-	inputs := make([]textinput.Model, 6)
+	inputs := make([]textinput.Model, 7)
 
 	// Name input
 	inputs[nameInput] = textinput.New()
@@ -78,6 +78,13 @@ func RunEditForm(hostName string) error {
 	inputs[identityInput].CharLimit = 200
 	inputs[identityInput].Width = 50
 	inputs[identityInput].SetValue(host.Identity)
+
+	// ProxyJump input
+	inputs[proxyJumpInput] = textinput.New()
+	inputs[proxyJumpInput].Placeholder = "user@jump-host:port or existing-host-name"
+	inputs[proxyJumpInput].CharLimit = 200
+	inputs[proxyJumpInput].Width = 50
+	inputs[proxyJumpInput].SetValue(host.ProxyJump)
 
 	// Tags input
 	inputs[tagsInput] = textinput.New()
@@ -185,6 +192,7 @@ func (m *editFormModel) View() string {
 		"User",
 		"Port",
 		"Identity File",
+		"ProxyJump",
 		"Tags (comma-separated)",
 	}
 
@@ -220,6 +228,7 @@ func (m *editFormModel) submitEditForm() tea.Cmd {
 		user := strings.TrimSpace(m.inputs[userInput].Value())
 		port := strings.TrimSpace(m.inputs[portInput].Value())
 		identity := strings.TrimSpace(m.inputs[identityInput].Value())
+		proxyJump := strings.TrimSpace(m.inputs[proxyJumpInput].Value())
 
 		// Set defaults
 		if port == "" {
@@ -245,12 +254,13 @@ func (m *editFormModel) submitEditForm() tea.Cmd {
 
 		// Create updated host configuration
 		host := config.SSHHost{
-			Name:     name,
-			Hostname: hostname,
-			User:     user,
-			Port:     port,
-			Identity: identity,
-			Tags:     tags,
+			Name:      name,
+			Hostname:  hostname,
+			User:      user,
+			Port:      port,
+			Identity:  identity,
+			ProxyJump: proxyJump,
+			Tags:      tags,
 		}
 
 		// Update the configuration
